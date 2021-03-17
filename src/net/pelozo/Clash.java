@@ -11,15 +11,15 @@ import java.util.Random;
 
 public class Clash {
 
-    private List<Viking> vikings;
-    private List<Spartan> spartans;
+    private List<Viking> teamA;
+    private List<Spartan> teamB;
 
     private List<Human> winners;
 
 
-    public Clash(List<Viking> vikings, List<Spartan> spartans) {
-        this.vikings = vikings;
-        this.spartans = spartans;
+    public Clash(List<Viking> teamA, List<Spartan> teamB) {
+        this.teamA = teamA;
+        this.teamB = teamB;
         winners = new ArrayList<>();
         //sort them by age
         sort();
@@ -29,38 +29,44 @@ public class Clash {
     public void start(){
 
         //make 'em fight
-        while(vikings.size() > 0 && spartans.size() > 0){
-            //get one of each
-            Viking viking = (Viking)getAndRemove(vikings);
-            Spartan spartan = (Spartan)getAndRemove(spartans);
+        while(teamA.size() > 0 && teamB.size() > 0){
 
-            //present them
-            System.out.println(viking.getName() + " vs " + spartan.getName());
+            Human winner = oneVsOne(getAndRemove(teamA), getAndRemove(teamB));
 
-            //make them drink until one of them needs to piss
-            while(viking.getStaminaLeft() > 0 && spartan.getStaminaLeft() > 0){
-                viking.drink();
-                spartan.drink();
-            }
-            //check winner
-            if(viking.getStaminaLeft() <= 0 && spartan.getStaminaLeft() <= 0){
-                viking.piss();
-                spartan.piss();
-                System.out.println("It's a tie! they both suck!");
-            }else if(viking.getStaminaLeft() <= 0){
-                viking.piss();
-                winners.add(spartan);
-                System.out.println(spartan.getName() + " wins!");
-            }else if(spartan.getStaminaLeft() <= 0){
-                spartan.piss();
-                winners.add(viking);
-                System.out.println(viking.getName() + " wins!");
+            //it'll return null in case of a tie
+            if(winner != null){
+                winners.add(winner);
             }
             System.out.println("");
 
         }
     }
 
+    public static Human oneVsOne(Human h1, Human h2){
+        //present them
+        System.out.println(h1.getName() + " vs " + h2.getName());
+        //make them drink until one of them needs to piss
+        while(h1.getStaminaLeft() > 0 && h2.getStaminaLeft() > 0){
+            h1.drink();
+            h2.drink();
+        }
+
+        //check winner
+        if(h1.getStaminaLeft() <= 0 && h2.getStaminaLeft() <= 0){
+            h1.piss();
+            h2.piss();
+            System.out.println("It's a tie! they both suck!");
+        }else if(h1.getStaminaLeft() <= 0){
+            h1.piss();
+            System.out.println(h2.getName() + " wins!");
+            return h2;
+        }else if(h2.getStaminaLeft() <= 0){
+            h2.piss();
+            System.out.println(h1.getName() + " wins!");
+            return h1;
+        }
+        return null;
+    }
 
 
     public void presentWinners(){
@@ -75,8 +81,8 @@ public class Clash {
     }
 
     private void sort(){
-        Collections.sort(vikings);
-        Collections.sort(spartans);
+        Collections.sort(teamA);
+        Collections.sort(teamB);
     }
 
     private Human getAndRemove(List<? extends Human> list){

@@ -3,9 +3,8 @@ package net.pelozo.model;
 import net.pelozo.interfaces.Drink;
 import net.pelozo.interfaces.Piss;
 
-import java.util.Comparator;
 
-public abstract class Human implements Comparable<Human>{
+public abstract class Human implements Comparable<Human>,Drink, Piss{
 
     protected String name;
     protected Integer age;
@@ -43,7 +42,7 @@ public abstract class Human implements Comparable<Human>{
         return drinkConsumed;
     }
 
-    public void addDrink(Integer drink) {
+    protected void addDrink(Integer drink) {
         this.drinkConsumed += drink;
     }
 
