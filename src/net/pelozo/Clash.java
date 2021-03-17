@@ -1,9 +1,15 @@
 package net.pelozo;
 
+import net.pelozo.impl.DrinkVikingImpl;
+import net.pelozo.impl.PissSpartanImpl;
 import net.pelozo.model.Human;
+import net.pelozo.model.InnOwner;
 import net.pelozo.model.Spartan;
 import net.pelozo.model.Viking;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -15,6 +21,9 @@ public class Clash {
     private List<Spartan> teamB;
 
     private List<Human> winners;
+    private Human finalWinner;
+
+    private final String FILE_WINNERS = "winners.txt";
 
 
     public Clash(List<Viking> teamA, List<Spartan> teamB) {
@@ -42,7 +51,54 @@ public class Clash {
         }
     }
 
-    public static Human oneVsOne(Human h1, Human h2){
+    public void ownerFight(){
+        //edge case no winners
+        if(winners.size() > 0){
+
+            System.out.println("And now, one lucky winner will be picked to face the inn owner...\n");
+
+            //it says the winner gets to go against the inn owner but there are several winners so idk, lets pick a random one?
+            Human luckyWinner = winners.get(new Random().nextInt(winners.size()));
+            //let that dude pee
+            System.out.println("Grats " + luckyWinner.getName() + ", you'll be facing Mr Inn Owner. But first, go pee...");
+            luckyWinner.piss();
+            System.out.println("And now, the last clash...");
+
+            //not a fan of instantiation this here.
+            InnOwner owner = new InnOwner("Mr Inn Owner", 50, 100, new PissSpartanImpl(), new DrinkVikingImpl());
+
+            finalWinner = oneVsOne(owner,luckyWinner);
+        }else{
+            System.out.println("No winners to fight Inn Owner. Did you run start()?");
+        }
+    }
+
+
+    //technically this is persisting in a database.
+    public void saveWinners() throws FileNotFoundException {
+        if(winners.isEmpty()) return; //should give feedback
+
+        File output = new File(FILE_WINNERS);
+
+
+        PrintWriter outputWriter = new PrintWriter(output);
+
+        for(int i = 0; i < winners.size(); i++) {
+            outputWriter.print(i+1 + ". " + winners.get(i).getName() + ": " + winners.get(i).getDrinkConsumed() + " - " + winners.get(i).getStaminaLeft());
+            outputWriter.print("\n");
+        }
+        if(finalWinner != null) { //could be null if there was a tie.
+            outputWriter.print(winners.size() + 1 + ". " + finalWinner.getName() + ": " + finalWinner.getDrinkConsumed() + " - " + finalWinner.getStaminaLeft());
+        }
+
+        outputWriter.println();
+        outputWriter.close();
+
+    }
+
+
+
+    private Human oneVsOne(Human h1, Human h2){
         //present them
         System.out.println(h1.getName() + " vs " + h2.getName());
         //make them drink until one of them needs to piss
