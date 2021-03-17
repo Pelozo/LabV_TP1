@@ -14,12 +14,24 @@ public class InnOwner extends Human implements Drink,Piss{
 
     @Override
     public Integer drink() {
-        return drink();
+        Integer toAdd = drink.drink();
+        addDrink(toAdd);
+        return toAdd;
     }
 
     @Override
     public void piss() {
-        piss();
+        piss.piss();
+    }
 
+    @Override
+    public String toString() {
+        return "InnOwner{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                ", weight=" + weight +
+                ", bladderCapacity=" + bladderCapacity +
+                ", drinkConsumed=" + drinkConsumed +
+                '}';
     }
 }
