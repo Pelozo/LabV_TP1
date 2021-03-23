@@ -29,7 +29,7 @@ public class Clash {
     public Clash(List<Viking> teamA, List<Spartan> teamB) {
         this.teamA = teamA;
         this.teamB = teamB;
-        winners = new ArrayList<>();
+        winners = new ArrayList();
         //sort them by age
         sort();
     }
