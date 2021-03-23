@@ -4,25 +4,20 @@ import net.pelozo.impl.DrinkSpartanImpl;
 import net.pelozo.impl.DrinkVikingImpl;
 import net.pelozo.impl.PissSpartanImpl;
 import net.pelozo.impl.PissVikingImpl;
-import net.pelozo.model.Human;
-import net.pelozo.model.InnOwner;
 import net.pelozo.model.Spartan;
 import net.pelozo.model.Viking;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        List<Viking> vikings = new ArrayList<>();
-        List<Spartan> spartans = new ArrayList<>();
+        List<Viking> vikings = new ArrayList();
+        List<Spartan> spartans = new ArrayList();
 
         //generate teams
         for(int i=1;i<11;i++){
