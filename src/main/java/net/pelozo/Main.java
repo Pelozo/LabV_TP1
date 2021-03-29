@@ -8,6 +8,7 @@ import net.pelozo.model.Spartan;
 import net.pelozo.model.Viking;
 
 import java.io.FileNotFoundException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -47,16 +48,17 @@ public class Main {
         clash.presentWinners();
         clash.ownerFight();
 
-        try {
+        try{
             clash.saveWinners();
-            System.out.println("Winners saved to file");
-        } catch (FileNotFoundException e) {
-            System.out.println("Couldn't save winners.");
+            System.out.println("Winners saved to database");
+        }catch(ClassNotFoundException e) {
+            System.out.println("Couldn't load driver necessary to save winners");
+        }catch(SQLException e) {
+            System.out.println("Couldn't add winner, sql error.");
         }
 
-
-
     }
+
 
     //shouldn't be here, 2 lazy 2 move.
     public static Integer getRand(int min, int max){

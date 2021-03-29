@@ -6,10 +6,12 @@ import net.pelozo.model.Human;
 import net.pelozo.model.InnOwner;
 import net.pelozo.model.Spartan;
 import net.pelozo.model.Viking;
+import net.pelozo.model.repositories.WinnerRepository;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -68,6 +70,7 @@ public class Clash {
             InnOwner owner = new InnOwner("Mr Inn Owner", 50, 100, new PissSpartanImpl(), new DrinkVikingImpl());
 
             finalWinner = oneVsOne(owner,luckyWinner);
+            if(finalWinner != null) winners.add(finalWinner);
         }else{
             System.out.println("No winners to fight Inn Owner. Did you run start()?");
         }
@@ -75,25 +78,16 @@ public class Clash {
 
 
     //technically this is persisting in a database.
-    public void saveWinners() throws FileNotFoundException {
+    public void saveWinners() throws SQLException, ClassNotFoundException {
+
         if(winners.isEmpty()) return; //should give feedback
 
-        File output = new File(FILE_WINNERS);
+        WinnerRepository winnerRepo = WinnerRepository.getInstance();
 
 
-        PrintWriter outputWriter = new PrintWriter(output);
-
-        for(int i = 0; i < winners.size(); i++) {
-            outputWriter.print(i+1 + ". " + winners.get(i).getName() + ": " + winners.get(i).getDrinkConsumed() + " - " + winners.get(i).getStaminaLeft());
-            outputWriter.print("\n");
+        for(Human winner : winners) {
+            winnerRepo.addWinner(winner);
         }
-        if(finalWinner != null) { //could be null if there was a tie.
-            outputWriter.print(winners.size() + 1 + ". " + finalWinner.getName() + ": " + finalWinner.getDrinkConsumed() + " - " + finalWinner.getStaminaLeft());
-        }
-
-        outputWriter.println();
-        outputWriter.close();
-
     }
 
 
