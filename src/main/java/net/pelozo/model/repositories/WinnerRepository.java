@@ -34,10 +34,8 @@ public class WinnerRepository {
 
 
             Statement stInsert = con.createStatement();
-            int rows = stInsert.executeUpdate("INSERT INTO winners (name, consumed) values " +
+            stInsert.executeUpdate("INSERT INTO winners (name, consumed) values " +
                     "('"+ winner.getName()+"', "+ winner.getDrinkConsumed()+")");
-
-            if(rows == 0) throw new RuntimeException("Something went wrong while adding winner");
 
             stInsert.close();
             con.close();
